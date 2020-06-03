@@ -301,6 +301,10 @@ Item {
                             }
 
                             PlasmaComponents.Label {
+                                function toHyperlink(str) {
+                                    var pattern1 = /(\b(https?|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+                                    return str.replace(pattern1, "<br><br><a href='$1'>$1</a><br><br>");
+                                }
                                 id: eventDescription
 
                                 Layout.row: 1
@@ -308,11 +312,14 @@ Item {
                                 Layout.fillWidth: true
 
                                 elide: Text.ElideRight
-                                text: modelData.description
+                                textFormat: Text.RichText
+                                wrapMode: Text.WordWrap
+                                text: toHyperlink(modelData.description)
                                 verticalAlignment: Text.AlignVCenter
-                                enabled: false
+                                enabled: true
 
                                 visible: text !== ""
+                                onLinkActivated: Qt.openUrlExternally(link)
                             }
                         }
                     }
